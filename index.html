@@ -1,555 +1,450 @@
 <!DOCTYPE html>
 <html lang="az">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Aydan üçün ☕</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap"
-    rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
   <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --rose: #f43f5e;
-      --pink: #ec4899;
-      --blush: #fce7f3;
-      --lavender: #e9d5ff;
-      --glass: rgba(255, 255, 255, 0.25);
+      --rose: #f43f5e; --pink: #ec4899; --blue: #3b82f6;
+      --glass: rgba(255,255,255,0.22);
     }
 
-    body {
+    html, body {
+      width: 100%; height: 100%;
       overflow: hidden;
+      -webkit-overflow-scrolling: touch;
       font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(-45deg, #fce7f3, #e9d5ff, #fcd4e8, #fbcfe8, #f472b6);
+      background: linear-gradient(-45deg,#bfdbfe,#fbcfe8,#93c5fd,#f9a8d4,#3b82f6,#ec4899);
       background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      cursor: default;
+      animation: gradientBG 12s ease infinite;
+      -webkit-user-select: none;
+      user-select: none;
     }
-
     @keyframes gradientBG {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
+      0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
     }
 
-    #bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
+    /* Hide scrollbars */
+    ::-webkit-scrollbar { display: none; }
+    * { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* AURORA — reduced blur for GPU perf on mobile */
+    #aurora { position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+    .aurora-beam {
+      position:absolute; width:70vw; height:70vw; border-radius:50%;
+      filter:blur(60px); opacity:0.25; animation:auroraMove linear infinite;
+      will-change: transform;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .ab1{background:radial-gradient(circle,#60a5fa,transparent 70%);top:-20%;left:-10%;animation-duration:18s;}
+    .ab2{background:radial-gradient(circle,#f472b6,transparent 70%);top:40%;right:-15%;animation-duration:22s;animation-delay:-7s;}
+    .ab3{background:radial-gradient(circle,#818cf8,transparent 70%);bottom:-20%;left:30%;animation-duration:16s;animation-delay:-12s;}
+    @keyframes auroraMove {
+      0%{transform:translate(0,0) scale(1)} 33%{transform:translate(6vw,4vh) scale(1.1)}
+      66%{transform:translate(-4vw,6vh) scale(0.92)} 100%{transform:translate(0,0) scale(1)}
     }
 
-    #particles {
-      position: fixed;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      overflow: hidden;
-      filter: blur(1px);
-    }
-
+    /* PARTICLES */
+    #particles { position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
     .particle {
-      position: absolute;
-      bottom: -50px;
-      font-size: 24px;
-      opacity: 0;
-      animation: rise linear infinite;
+      position:absolute; bottom:-50px; opacity:0;
+      animation:rise linear infinite;
+      will-change: transform, opacity;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
-
     @keyframes rise {
-      0% {
-        transform: translateY(0) rotate(0deg) scale(0.6);
-        opacity: 0;
-      }
-
-      10% {
-        opacity: 0.9;
-      }
-
-      90% {
-        opacity: 0.7;
-      }
-
-      100% {
-        transform: translateY(-110vh) rotate(360deg) scale(1.5);
-        opacity: 0;
-      }
+      0%{transform:translateY(0) rotate(0deg) scale(0.6);opacity:0}
+      10%{opacity:0.8} 90%{opacity:0.6}
+      100%{transform:translateY(-110vh) rotate(360deg) scale(1.3);opacity:0}
     }
 
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 2;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-      background-size: 200px;
-      opacity: 0.4;
+    /* TOUCH BURST — tap anywhere */
+    .click-heart {
+      position:fixed; pointer-events:none; z-index:9997; line-height:1;
+      transform-origin: center;
+      animation:clickBurst 0.7s forwards cubic-bezier(.22,1,.36,1);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    @keyframes clickBurst {
+      0%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(0.5)}
+      60%{opacity:1}
+      100%{opacity:0;transform:translate(calc(var(--dx)*3),calc(var(--dy)*3 - 55px)) scale(1.3)}
     }
 
-    #content {
-      position: fixed;
-      inset: 0;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    /* INTRO SPLASH */
+    #intro {
+      position:fixed; inset:0; z-index:200;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,#1e3a5f,#4c1d95,#831843);
+      transition:opacity 0.8s ease, transform 0.8s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #intro.fade-out{opacity:0;transform:scale(1.06);pointer-events:none;}
+    .intro-heart{
+      font-size:clamp(5rem,18vw,7rem);
+      animation:introHB 0.85s ease-in-out infinite;
+      backface-visibility: hidden;
+    }
+    @keyframes introHB {
+      0%,100%{transform:scale(1)} 50%{transform:scale(1.22)}
+    }
+    .intro-text{
+      margin-top:24px; font-family:'Playfair Display',serif;
+      font-size:clamp(1.4rem,5vw,2rem); color:rgba(255,255,255,0.92);
+      letter-spacing:0.06em; text-align:center; padding:0 20px;
+    }
+    .intro-sub{
+      margin-top:10px; color:rgba(255,255,255,0.5); font-size:clamp(0.8rem,3vw,0.95rem);
+      letter-spacing:0.12em; text-transform:uppercase;
+      animation:fadeInUp 0.8s ease 0.5s both;
+    }
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .intro-bar{margin-top:36px;width:min(200px,60vw);height:3px;background:rgba(255,255,255,0.15);border-radius:3px;overflow:hidden;}
+    .intro-bar-fill{height:100%;background:linear-gradient(90deg,#3b82f6,#ec4899);border-radius:3px;animation:barFill 2.2s ease forwards;}
+    @keyframes barFill{from{width:0%}to{width:100%}}
+
+    /* MAIN CONTENT */
+    #content{
+      position:fixed; inset:0; z-index:10;
+      display:flex; align-items:center; justify-content:center;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
 
     .card {
-      position: absolute;
-      width: min(650px, 92vw);
-      padding: 60px 48px;
-      background: var(--glass);
-      backdrop-filter: blur(40px) saturate(200%);
-      -webkit-backdrop-filter: blur(40px) saturate(200%);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      border-radius: 32px;
-      text-align: center;
-      box-shadow: 0 0 40px rgba(244, 63, 94, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.5);
+      position:absolute;
+      width:min(600px, 92vw);
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: clamp(30px,6vw,60px) clamp(24px,5vw,48px);
+      background:var(--glass);
+      -webkit-backdrop-filter:blur(30px) saturate(180%);
+      backdrop-filter:blur(30px) saturate(180%);
+      border:1px solid rgba(255,255,255,0.65);
+      border-radius:28px; text-align:center;
+      box-shadow:0 8px 40px rgba(59,130,246,0.2),0 8px 40px rgba(244,63,94,0.15),inset 0 0 20px rgba(255,255,255,0.4);
+      opacity:0; transform:scale(0.9) translateY(24px);
+      pointer-events:none;
+      transition:opacity 0.55s cubic-bezier(.22,1,.36,1),transform 0.55s cubic-bezier(.22,1,.36,1);
+      -webkit-tap-highlight-color: transparent;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .card.active{
+      opacity:1; transform:scale(1) translateY(0); pointer-events:all;
+      animation:floatCard 6s ease-in-out infinite alternate;
+    }
+    @keyframes floatCard{0%{transform:translateY(0)}100%{transform:translateY(-10px)}}
+    .card.exit{opacity:0;transform:scale(1.04) translateY(-24px);pointer-events:none;}
+    /* shimmer border */
+    .card::before{
+      content:'';position:absolute;inset:-1px;border-radius:29px;
+      background:linear-gradient(135deg,rgba(59,130,246,0.35),rgba(236,72,153,0.35),rgba(59,130,246,0.35));
+      background-size:200% 200%;animation:shimmerBorder 4s linear infinite;z-index:-1;
+    }
+    @keyframes shimmerBorder{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-      opacity: 0;
-      transform: scale(0.88) translateY(30px);
-      pointer-events: none;
-      transition: opacity 0.6s cubic-bezier(.22, 1, .36, 1),
-        transform 0.6s cubic-bezier(.22, 1, .36, 1);
+    h1,h2{
+      font-family:'Playfair Display',serif; color:#1e3a5f; line-height:1.3;
+    }
+    h1{font-size:clamp(1.8rem,6vw,3.5rem);}
+    h2{font-size:clamp(1.5rem,5vw,2.6rem);}
+
+    .sub{
+      margin-top:16px; font-size:clamp(0.95rem,3.5vw,1.2rem);
+      color:#1e3a5f; font-weight:500; line-height:1.7;
+      animation:textFadeIn 1s ease forwards; opacity:0; transform:translateY(8px);
+    }
+    @keyframes textFadeIn{to{opacity:1;transform:translateY(0)}}
+
+    .emoji-big{
+      font-size:clamp(3rem,10vw,4rem); display:block; margin-bottom:16px;
+      animation:pulse 2s ease-in-out infinite;
+      backface-visibility: hidden;
+    }
+    @keyframes pulse{
+      0%,100%{transform:scale(1)} 50%{transform:scale(1.12)}
     }
 
-    .card.active {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-      pointer-events: all;
-      animation: floatCard 6s ease-in-out infinite alternate;
+    .dots{display:flex;justify-content:center;gap:8px;margin-top:28px;}
+    .dot{
+      width:9px;height:9px;border-radius:50%;
+      background:rgba(59,130,246,0.2);
+      transition:background 0.4s,transform 0.4s,box-shadow 0.4s;
+    }
+    .dot.on{
+      background:linear-gradient(135deg,#3b82f6,#ec4899);
+      transform:scale(1.4);box-shadow:0 0 8px #818cf8;
     }
 
-    @keyframes floatCard {
-      0% {
-        transform: translateY(0);
-      }
+    .btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:28px;}
 
-      100% {
-        transform: translateY(-12px);
-      }
+    .btn{
+      font-family:'Montserrat',sans-serif;
+      font-size:clamp(0.95rem,3.5vw,1.05rem);
+      font-weight:600; letter-spacing:0.04em;
+      padding:14px clamp(24px,6vw,36px);
+      border:none; border-radius:50px;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+      touch-action:manipulation;
+      transition:transform 0.2s ease, box-shadow 0.2s ease;
+      position:relative; overflow:hidden;
+      min-height:50px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
-
-    .card.exit {
-      opacity: 0;
-      transform: scale(1.06) translateY(-30px);
-      pointer-events: none;
+    .btn-primary{
+      background:linear-gradient(135deg,#3b82f6,#ec4899,#f43f5e);
+      background-size:200% 200%;
+      animation:btnGradient 3s ease infinite;
+      color:#fff;
+      box-shadow:0 4px 20px rgba(244,63,94,0.45);
     }
-
-    h1,
-    h2 {
-      font-family: 'Playfair Display', serif;
-      color: #831843;
-      line-height: 1.3;
-      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
+    @keyframes btnGradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    .btn-primary:active{transform:scale(0.93);}
+    .btn-ghost{
+      background:rgba(255,255,255,0.65);color:#1e40af;
+      border:2px solid rgba(59,130,246,0.35);
     }
+    .btn-ghost:active{transform:scale(0.95);}
 
-    h1 {
-      font-size: clamp(2.2rem, 5vw, 3.5rem);
+    #yes-screen{
+      position:fixed;inset:0;z-index:50;
+      display:flex;align-items:center;justify-content:center;
+      background:radial-gradient(circle at 30% 40%,#3b82f6,#818cf8,#ec4899,#f43f5e);
+      opacity:0;pointer-events:none;transition:opacity 0.9s ease;
     }
-
-    h2 {
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
+    #yes-screen.show{opacity:1;pointer-events:all;}
+    #yes-screen .msg{
+      font-family:'Playfair Display',serif;color:#fff;text-align:center;
+      padding:30px;
+      transform:scale(0.7);
+      transition:transform 0.8s cubic-bezier(.22,1,.36,1) 0.3s;
+      backface-visibility: hidden;
     }
+    #yes-screen.show .msg{transform:scale(1);}
+    #yes-screen .msg h1{font-size:clamp(2.5rem,8vw,5rem);color:#fff;}
+    #yes-screen .msg p{font-family:'Montserrat',sans-serif;font-size:clamp(1rem,4vw,1.4rem);margin-top:16px;font-weight:500;}
 
-    .sub {
-      margin-top: 20px;
-      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
-      color: #831843;
-      font-weight: 500;
-      line-height: 1.7;
-      animation: textFadeIn 1s ease forwards;
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    @keyframes textFadeIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .emoji-big {
-      font-size: 4rem;
-      display: block;
-      margin-bottom: 20px;
-      animation: pulse 2s ease-in-out infinite, floatEmoji 3s ease-in-out infinite alternate;
-    }
-
-    @keyframes floatEmoji {
-      to {
-        transform: translateY(-8px) scale(1.1);
-      }
-    }
-
-    @keyframes pulse {
-
-      0%,
-      100% {
-        transform: scale(1);
-        filter: drop-shadow(0 0 10px rgba(244, 63, 94, 0.3));
-      }
-
-      50% {
-        transform: scale(1.15);
-        filter: drop-shadow(0 0 25px rgba(244, 63, 94, 0.6));
-      }
-    }
-
-    .dots {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 35px;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: rgba(244, 63, 94, 0.25);
-      transition: background 0.4s, transform 0.4s, box-shadow 0.4s;
-    }
-
-    .dot.on {
-      background: var(--rose);
-      transform: scale(1.4);
-      box-shadow: 0 0 10px var(--rose);
-    }
-
-    .btns {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 35px;
-    }
-
-    .btn {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1.05rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      padding: 14px 36px;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #ec4899, #f43f5e);
-      color: #fff;
-      box-shadow: 0 4px 20px rgba(244, 63, 94, 0.4);
-      animation: btnGlow 2s infinite alternate;
-    }
-
-    @keyframes btnGlow {
-      from {
-        box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
-      }
-
-      to {
-        box-shadow: 0 4px 30px rgba(244, 63, 94, 0.8);
-      }
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-3px) scale(1.05);
-    }
-
-    .btn-primary:active {
-      transform: scale(0.95);
-    }
-
-    .btn-ghost {
-      background: rgba(255, 255, 255, 0.6);
-      color: #9d174d;
-      border: 2px solid rgba(244, 63, 94, 0.3);
-      backdrop-filter: blur(10px);
-    }
-
-    .btn-ghost:hover {
-      transform: translateY(-2px);
-      background: rgba(255, 255, 255, 0.9);
-    }
-
-    #yes-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle, #fce7f3, #f9a8d4, #ec4899);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 1s ease;
-    }
-
-    #yes-screen.show {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    #yes-screen .msg {
-      font-family: 'Playfair Display', serif;
-      color: #fff;
-      text-align: center;
-      padding: 40px;
-      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      transform: scale(0.7);
-      transition: transform 0.8s cubic-bezier(.22, 1, .36, 1) 0.3s;
-    }
-
-    #yes-screen.show .msg {
-      transform: scale(1);
-    }
-
-    #yes-screen .msg h1 {
-      font-size: clamp(3rem, 8vw, 5rem);
-    }
-
-    #yes-screen .msg p {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1.4rem;
-      margin-top: 20px;
-      font-weight: 500;
-    }
-
-    .divider {
-      width: 80px;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, var(--rose), transparent);
-      margin: 24px auto 0;
-      border-radius: 5px;
+    .divider{
+      width:70px;height:3px;
+      background:linear-gradient(90deg,transparent,#3b82f6,#ec4899,transparent);
+      margin:20px auto 0;border-radius:5px;
     }
   </style>
 </head>
-
 <body>
 
-  <div id="bg"></div>
-  <div id="particles"></div>
+<div id="aurora">
+  <div class="aurora-beam ab1"></div>
+  <div class="aurora-beam ab2"></div>
+  <div class="aurora-beam ab3"></div>
+</div>
 
-  <div id="content">
+<div id="particles"></div>
 
-    <div class="card active" id="step1">
-      <span class="emoji-big">💌</span>
-      <h1>Aydan üçün</h1>
-      <div class="divider"></div>
-      <p class="sub" style="animation-delay: 0.3s;">Sənin üçün xüsusi bir şey hazırladım...</p>
-      <div class="btns">
-        <button class="btn btn-primary" onclick="next(2)">Başla &nbsp;✨</button>
-      </div>
-      <div class="dots">
-        <div class="dot on"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
-    </div>
+<div id="intro">
+  <div class="intro-heart">💝</div>
+  <div class="intro-text">Aydan üçün</div>
+  <div class="intro-sub">Xüsusi bir şey hazırladım</div>
+  <div class="intro-bar"><div class="intro-bar-fill"></div></div>
+</div>
 
-    <div class="card" id="step2">
-      <span class="emoji-big">💭</span>
-      <h2>Bunu necə deyim...</h2>
-      <div class="divider"></div>
-      <p class="sub" style="animation-delay: 0.3s;">Bunu necə yazım, necə deyim deyə çox düşündüm, gizlətməyəcəm, hətta
-        qorxdum belə. Bunu deməklə sənin ürəyini qəti şəkildə qırmaq istəmirəm, ona görə də bunu bir az fərqli formada
-        deməyə qərar aldım.</p>
-      <div class="btns">
-        <button class="btn btn-primary" onclick="next(3)">Davam et →</button>
-      </div>
-      <div class="dots">
-        <div class="dot"></div>
-        <div class="dot on"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
-    </div>
+<div id="content">
 
-    <div class="card" id="step3">
-      <span class="emoji-big">🌸</span>
-      <h2>Sakitlik...</h2>
-      <div class="divider"></div>
-      <p class="sub" style="animation-delay: 0.3s;">Səninlə danışmaq ruhuma sakitlik gətirir, istəmədən özümü xoşbəxt
-        hiss edirəm və səninlə bir az daha çox vaxt keçirmək, səni xoşbəxt etmək istəyirəm.</p>
-      <div class="btns">
-        <button class="btn btn-primary" onclick="next(4)">Sonra? →</button>
-      </div>
-      <div class="dots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot on"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
-    </div>
-
-    <div class="card" id="step4">
-      <span class="emoji-big">✨</span>
-      <h2>Gələcək...</h2>
-      <div class="divider"></div>
-      <p class="sub" style="animation-delay: 0.3s;">Mənə keçmiş heç vaxt maraqlı olmayacaq, amma gələcəyi maraqlı edə
-        bilərəm, nəyin bahasına olursa olsun...</p>
-      <div class="btns">
-        <button class="btn btn-primary" onclick="next(5)">Son bir şey... 🤍</button>
-      </div>
-      <div class="dots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot on"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
-    </div>
-
-    <div class="card" id="step5">
-      <span class="emoji-big">🥺</span>
-      <h2>Sualım var...</h2>
-      <div class="divider"></div>
-      <p class="sub" style="animation-delay: 0.3s;">Ona görə də, sənə kiçik bir sualım var.<br>Ümid edirəm cavabın
-        "bəli" olar...</p>
-      <div class="btns">
-        <button class="btn btn-primary" onclick="next(6)">Soruş →</button>
-      </div>
-      <div class="dots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot on"></div>
-        <div class="dot"></div>
-      </div>
-    </div>
-
-    <div class="card" id="step6">
-      <span class="emoji-big">☕</span>
-      <h2>Coffee date?</h2>
-      <div class="divider"></div>
-      <p class="sub" style="animation-delay: 0.3s;">Ona görə səni bir kofe içməyə dəvət edirəm. Sadəcə oturaq, danışaq,
-        bir-birimizi daha yaxşı tanıyaq. Təklifimi qəbul edərsən?</p>
-      <div class="btns">
-        <button class="btn btn-primary" onclick="onYes()">Bəli ❤️</button>
-        <button class="btn btn-ghost" onclick="onNo()">Yox 😅</button>
-      </div>
-      <div class="dots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot on"></div>
-      </div>
-    </div>
-
-  </div>
-
-  <div id="yes-screen">
-    <div class="msg">
-      <h1>Görüşürük! 😍</h1>
-      <p>WhatsApp-a yönləndirilir...</p>
+  <div class="card active" id="step1">
+    <span class="emoji-big">💌</span>
+    <h1>Aydan üçün</h1>
+    <div class="divider"></div>
+    <p class="sub" style="animation-delay:0.3s;">Sənin üçün xüsusi bir şey hazırladım...</p>
+    <div class="btns"><button class="btn btn-primary" onclick="next(2)">Başla &nbsp;✨</button></div>
+    <div class="dots">
+      <div class="dot on"></div><div class="dot"></div><div class="dot"></div>
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
     </div>
   </div>
 
-  <script>
-    /* ── İSTİFADƏÇİNİN NÖMRƏSİ ── */
-    const phoneNumber = "994997789000";
+  <div class="card" id="step2">
+    <span class="emoji-big">💭</span>
+    <h2>Bunu necə deyim...</h2>
+    <div class="divider"></div>
+    <p class="sub" style="animation-delay:0.3s;">Bunu necə yazım, necə deyim deyə çox düşündüm, gizlətməyəcəm, hətta qorxdum belə. Bunu deməklə sənin ürəyini qırmaq istəmirəm, ona görə bunu bir az fərqli formada deməyə qərar aldım.</p>
+    <div class="btns"><button class="btn btn-primary" onclick="next(3)">Davam et →</button></div>
+    <div class="dots">
+      <div class="dot"></div><div class="dot on"></div><div class="dot"></div>
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+  </div>
 
-    let current = 1;
+  <div class="card" id="step3">
+    <span class="emoji-big">🌸</span>
+    <h2>Sakitlik...</h2>
+    <div class="divider"></div>
+    <p class="sub" style="animation-delay:0.3s;">Səninlə danışmaq ruhuma sakitlik gətirir, istəmədən özümü xoşbəxt hiss edirəm və səninlə bir az daha çox vaxt keçirmək, səni xoşbəxt etmək istəyirəm.</p>
+    <div class="btns"><button class="btn btn-primary" onclick="next(4)">Sonra? →</button></div>
+    <div class="dots">
+      <div class="dot"></div><div class="dot"></div><div class="dot on"></div>
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+  </div>
 
-    function next(n) {
-      const prev = document.getElementById('step' + current);
-      prev.classList.add('exit');
-      setTimeout(() => prev.classList.remove('active', 'exit'), 600);
+  <div class="card" id="step4">
+    <span class="emoji-big">✨</span>
+    <h2>Gələcək...</h2>
+    <div class="divider"></div>
+    <p class="sub" style="animation-delay:0.3s;">Mənə keçmiş heç vaxt maraqlı olmayacaq, amma gələcəyi maraqlı edə bilərəm, nəyin bahasına olursa olsun...</p>
+    <div class="btns"><button class="btn btn-primary" onclick="next(5)">Son bir şey... 🤍</button></div>
+    <div class="dots">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      <div class="dot on"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+  </div>
 
-      setTimeout(() => {
-        const next = document.getElementById('step' + n);
-        next.classList.add('active');
-        current = n;
-      }, 250);
+  <div class="card" id="step5">
+    <span class="emoji-big">🥺</span>
+    <h2>Sualım var...</h2>
+    <div class="divider"></div>
+    <p class="sub" style="animation-delay:0.3s;">Ona görə də, sənə kiçik bir sualım var.<br>Ümid edirəm cavabın "bəli" olar...</p>
+    <div class="btns"><button class="btn btn-primary" onclick="next(6)">Soruş →</button></div>
+    <div class="dots">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      <div class="dot"></div><div class="dot on"></div><div class="dot"></div>
+    </div>
+  </div>
+
+  <div class="card" id="step6">
+    <span class="emoji-big">☕</span>
+    <h2>Coffee date?</h2>
+    <div class="divider"></div>
+    <p class="sub" style="animation-delay:0.3s;">Ona görə səni bir kofe içməyə dəvət edirəm. Sadəcə oturaq, danışaq, bir-birimizi daha yaxşı tanıyaq. Təklifimi qəbul edərsən?</p>
+    <div class="btns">
+      <button class="btn btn-primary" onclick="onYes()">Bəli ❤️</button>
+      <button class="btn btn-ghost" onclick="onNo()">Yox 😅</button>
+    </div>
+    <div class="dots">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      <div class="dot"></div><div class="dot"></div><div class="dot on"></div>
+    </div>
+  </div>
+
+</div>
+
+<div id="yes-screen">
+  <div class="msg">
+    <h1>Görüşürük! 😍</h1>
+    <p>WhatsApp-a yönləndirilir...</p>
+  </div>
+</div>
+
+<script>
+  const phoneNumber = "994997789000";
+  let current = 1;
+
+  /* detect touch device */
+  const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+
+  /* INTRO */
+  setTimeout(() => {
+    const intro = document.getElementById('intro');
+    intro.classList.add('fade-out');
+    setTimeout(() => intro.remove(), 900);
+  }, 2500);
+
+  /* CARD TRANSITIONS */
+  function next(n) {
+    const prev = document.getElementById('step' + current);
+    prev.classList.add('exit');
+    setTimeout(() => prev.classList.remove('active','exit'), 550);
+    setTimeout(() => {
+      document.getElementById('step'+n).classList.add('active');
+      current = n;
+    }, 220);
+  }
+
+  function onYes() {
+    document.getElementById('yes-screen').classList.add('show');
+    const colors = ['#3b82f6','#818cf8','#ec4899','#f43f5e','#fbbf24','#fff','#c084fc'];
+    const burst = (origin, angle) =>
+      confetti({ particleCount: 80, spread: 80, angle, origin, colors, startVelocity: 45 });
+    burst({x:.5,y:.6}, 90);
+    setTimeout(() => { burst({x:.2,y:.7},60); burst({x:.8,y:.7},120); }, 300);
+    setTimeout(() => burst({x:.5,y:.5},90), 700);
+    setTimeout(() => {
+      window.location.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent("Bəli, təklifini məmnuniyyətlə qəbul edirəm! ☕❤️😍")}`;
+    }, 2200);
+  }
+
+  function onNo() {
+    window.location.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent("Yox, təəssüf ki, qəbul edə bilməyəcəm. 😅")}`;
+  }
+
+  /* FLOATING PARTICLES */
+  const emojis = ['❤️','💙','🌸','✨','��','🌷','💗','☕','🌙','⭐','🥰','🎀','🤍','💙','💙'];
+  const pContainer = document.getElementById('particles');
+  for (let i = 0; i < 25; i++) {
+    const el = document.createElement('div');
+    el.className = 'particle';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.cssText = `left:${Math.random()*100}%;font-size:${14+Math.random()*16}px;animation-duration:${7+Math.random()*10}s;animation-delay:${Math.random()*10}s;`;
+    pContainer.appendChild(el);
+  }
+
+  /* TAP/CLICK BURST */
+  const burstEmojis = ['❤️','💙','💕','🌸','✨','💗','🌟'];
+
+  function spawnBurst(cx, cy) {
+    for (let i = 0; i < 6; i++) {
+      const h = document.createElement('div');
+      h.className = 'click-heart';
+      h.textContent = burstEmojis[Math.floor(Math.random() * burstEmojis.length)];
+      const angle = (Math.PI * 2 / 6) * i;
+      const dist = 35 + Math.random() * 40;
+      h.style.left = cx + 'px';
+      h.style.top  = cy + 'px';
+      h.style.fontSize = (13 + Math.random() * 12) + 'px';
+      h.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+      h.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+      h.style.animationDelay = (i * 0.03) + 's';
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 800);
     }
+  }
 
-    /* ── BƏLİ DÜYMƏSİ VƏ WHATSAPP-A YÖNLƏNDİRMƏ ── */
-    function onYes() {
-      const ys = document.getElementById('yes-screen');
-      ys.classList.add('show');
+  /* Touch support */
+  if (isTouch) {
+    document.addEventListener('touchstart', e => {
+      const t = e.touches[0];
+      spawnBurst(t.clientX, t.clientY);
+    }, { passive: true });
+  } else {
+    document.addEventListener('click', e => spawnBurst(e.clientX, e.clientY));
+  }
 
-      const colors = ['#f43f5e', '#ec4899', '#fbbf24', '#fff', '#c084fc', '#fbcfe8'];
-      function burst(origin, angle) {
-        confetti({ particleCount: 120, spread: 80, angle, origin, colors, startVelocity: 45 });
-      }
-      burst({ x: 0.5, y: 0.6 }, 90);
-      setTimeout(() => { burst({ x: 0.2, y: 0.7 }, 60); burst({ x: 0.8, y: 0.7 }, 120); }, 300);
-      setTimeout(() => { burst({ x: 0.5, y: 0.5 }, 90); }, 700);
+  /* Prevent double-tap zoom on iOS */
+  let lastTap = 0;
+  document.addEventListener('touchend', e => {
+    const now = Date.now();
+    if (now - lastTap < 300) e.preventDefault();
+    lastTap = now;
+  }, { passive: false });
 
-      // 2 saniyə sonra WhatsApp-ı açır
-      setTimeout(() => {
-        const text = encodeURIComponent("Bəli, təklifini məmnuniyyətlə qəbul edirəm! ☕❤️😍");
-        window.location.href = `https://wa.me/${phoneNumber}?text=${text}`;
-      }, 2000);
-    }
-
-    /* ── YOX DÜYMƏSİ VƏ WHATSAPP-A YÖNLƏNDİRMƏ ── */
-    function onNo() {
-      // Yox seçəndə birbaşa WhatsApp-a atır
-      const text = encodeURIComponent("Yox, təəssüf ki, qəbul edə bilməyəcəm. 😅");
-      window.location.href = `https://wa.me/${phoneNumber}?text=${text}`;
-    }
-
-    /* ── UÇUŞAN EMOJİLƏR (Göy ürək silindi, ağ ürək qaldı) ── */
-    const emojis = ['❤️', '🌸', '✨', '💕', '🌷', '💗', '☕', '🌙', '⭐', '🥰', '🎀', '🤍', '🩵','💙'];
-
-    function createParticles() {
-      const container = document.getElementById('particles');
-      for (let i = 0; i < 50; i++) {
-        const el = document.createElement('div');
-        el.className = 'particle';
-        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        el.style.cssText = `
-      left: ${Math.random() * 100}%;
-      font-size: ${16 + Math.random() * 20}px;
-      animation-duration: ${6 + Math.random() * 10}s;
-      animation-delay: ${Math.random() * 10}s;
-      filter: blur(${Math.random() * 2}px);
-    `;
-        container.appendChild(el);
-      }
-    }
-    createParticles();
-  </script>
+  /* Prevent pull-to-refresh */
+  document.addEventListener('touchmove', e => {
+    if (e.touches.length === 1) e.preventDefault();
+  }, { passive: false });
+</script>
 </body>
-
 </html>
