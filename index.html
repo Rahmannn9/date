@@ -391,14 +391,14 @@
     window.location.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent("Yox, təəssüf ki, qəbul edə bilməyəcəm. 😅")}`;
   }
 
-  /* FLOATING PARTICLES */
+  /* FLOATING PARTICLES — FASTER ANIMATION */
   const emojis = ['❤️','💙','🌸','✨','💕','🌷','💗','☕','🌙','⭐','🥰','🎀','🤍','💙','💙','🧸','🦋','💖'];
   const pContainer = document.getElementById('particles');
   for (let i = 0; i < 25; i++) {
     const el = document.createElement('div');
     el.className = 'particle';
     el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    el.style.cssText = `left:${Math.random()*100}%;font-size:${14+Math.random()*16}px;animation-duration:${7+Math.random()*10}s;animation-delay:${Math.random()*10}s;`;
+    el.style.cssText = `left:${Math.random()*100}%;font-size:${14+Math.random()*16}px;animation-duration:${5+Math.random()*6}s;animation-delay:${Math.random()*8}s;`;
     pContainer.appendChild(el);
   }
 
