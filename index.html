@@ -1,450 +1,337 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Aydan üçün ☕</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon - Love Theme</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    :root {
-      --rose: #f43f5e; --pink: #ec4899; --blue: #3b82f6;
-      --glass: rgba(255,255,255,0.22);
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
 
-    html, body {
-      width: 100%; height: 100%;
-      overflow: hidden;
-      -webkit-overflow-scrolling: touch;
-      font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(-45deg,#bfdbfe,#fbcfe8,#93c5fd,#f9a8d4,#3b82f6,#ec4899);
-      background-size: 400% 400%;
-      animation: gradientBG 12s ease infinite;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-    @keyframes gradientBG {
-      0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
-    }
+        .container {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
 
-    /* Hide scrollbars */
-    ::-webkit-scrollbar { display: none; }
-    * { -ms-overflow-style: none; scrollbar-width: none; }
+        h1 {
+            font-size: 4em;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
 
-    /* AURORA — reduced blur for GPU perf on mobile */
-    #aurora { position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
-    .aurora-beam {
-      position:absolute; width:70vw; height:70vw; border-radius:50%;
-      filter:blur(60px); opacity:0.25; animation:auroraMove linear infinite;
-      will-change: transform;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-    }
-    .ab1{background:radial-gradient(circle,#60a5fa,transparent 70%);top:-20%;left:-10%;animation-duration:18s;}
-    .ab2{background:radial-gradient(circle,#f472b6,transparent 70%);top:40%;right:-15%;animation-duration:22s;animation-delay:-7s;}
-    .ab3{background:radial-gradient(circle,#818cf8,transparent 70%);bottom:-20%;left:30%;animation-duration:16s;animation-delay:-12s;}
-    @keyframes auroraMove {
-      0%{transform:translate(0,0) scale(1)} 33%{transform:translate(6vw,4vh) scale(1.1)}
-      66%{transform:translate(-4vw,6vh) scale(0.92)} 100%{transform:translate(0,0) scale(1)}
-    }
+        .subtitle {
+            font-size: 1.5em;
+            color: #ffe6e6;
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
 
-    /* PARTICLES */
-    #particles { position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
-    .particle {
-      position:absolute; bottom:-50px; opacity:0;
-      animation:rise linear infinite;
-      will-change: transform, opacity;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-    }
-    @keyframes rise {
-      0%{transform:translateY(0) rotate(0deg) scale(0.6);opacity:0}
-      10%{opacity:0.8} 90%{opacity:0.6}
-      100%{transform:translateY(-110vh) rotate(360deg) scale(1.3);opacity:0}
-    }
+        .countdown {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
 
-    /* TOUCH BURST — tap anywhere */
-    .click-heart {
-      position:fixed; pointer-events:none; z-index:9997; line-height:1;
-      transform-origin: center;
-      animation:clickBurst 0.7s forwards cubic-bezier(.22,1,.36,1);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-    }
-    @keyframes clickBurst {
-      0%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(0.5)}
-      60%{opacity:1}
-      100%{opacity:0;transform:translate(calc(var(--dx)*3),calc(var(--dy)*3 - 55px)) scale(1.3)}
-    }
+        .countdown-title {
+            font-size: 1.2em;
+            color: #c44569;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
 
-    /* INTRO SPLASH */
-    #intro {
-      position:fixed; inset:0; z-index:200;
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      background:linear-gradient(135deg,#1e3a5f,#4c1d95,#831843);
-      transition:opacity 0.8s ease, transform 0.8s ease;
-      -webkit-tap-highlight-color: transparent;
-    }
-    #intro.fade-out{opacity:0;transform:scale(1.06);pointer-events:none;}
-    .intro-heart{
-      font-size:clamp(5rem,18vw,7rem);
-      animation:introHB 0.85s ease-in-out infinite;
-      backface-visibility: hidden;
-    }
-    @keyframes introHB {
-      0%,100%{transform:scale(1)} 50%{transform:scale(1.22)}
-    }
-    .intro-text{
-      margin-top:24px; font-family:'Playfair Display',serif;
-      font-size:clamp(1.4rem,5vw,2rem); color:rgba(255,255,255,0.92);
-      letter-spacing:0.06em; text-align:center; padding:0 20px;
-    }
-    .intro-sub{
-      margin-top:10px; color:rgba(255,255,255,0.5); font-size:clamp(0.8rem,3vw,0.95rem);
-      letter-spacing:0.12em; text-transform:uppercase;
-      animation:fadeInUp 0.8s ease 0.5s both;
-    }
-    @keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    .intro-bar{margin-top:36px;width:min(200px,60vw);height:3px;background:rgba(255,255,255,0.15);border-radius:3px;overflow:hidden;}
-    .intro-bar-fill{height:100%;background:linear-gradient(90deg,#3b82f6,#ec4899);border-radius:3px;animation:barFill 2.2s ease forwards;}
-    @keyframes barFill{from{width:0%}to{width:100%}}
+        .countdown-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
 
-    /* MAIN CONTENT */
-    #content{
-      position:fixed; inset:0; z-index:10;
-      display:flex; align-items:center; justify-content:center;
-      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    }
+        .time-box {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 80px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
 
-    .card {
-      position:absolute;
-      width:min(600px, 92vw);
-      max-height: calc(100vh - 40px);
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: clamp(30px,6vw,60px) clamp(24px,5vw,48px);
-      background:var(--glass);
-      -webkit-backdrop-filter:blur(30px) saturate(180%);
-      backdrop-filter:blur(30px) saturate(180%);
-      border:1px solid rgba(255,255,255,0.65);
-      border-radius:28px; text-align:center;
-      box-shadow:0 8px 40px rgba(59,130,246,0.2),0 8px 40px rgba(244,63,94,0.15),inset 0 0 20px rgba(255,255,255,0.4);
-      opacity:0; transform:scale(0.9) translateY(24px);
-      pointer-events:none;
-      transition:opacity 0.55s cubic-bezier(.22,1,.36,1),transform 0.55s cubic-bezier(.22,1,.36,1);
-      -webkit-tap-highlight-color: transparent;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-    }
-    .card.active{
-      opacity:1; transform:scale(1) translateY(0); pointer-events:all;
-      animation:floatCard 6s ease-in-out infinite alternate;
-    }
-    @keyframes floatCard{0%{transform:translateY(0)}100%{transform:translateY(-10px)}}
-    .card.exit{opacity:0;transform:scale(1.04) translateY(-24px);pointer-events:none;}
-    /* shimmer border */
-    .card::before{
-      content:'';position:absolute;inset:-1px;border-radius:29px;
-      background:linear-gradient(135deg,rgba(59,130,246,0.35),rgba(236,72,153,0.35),rgba(59,130,246,0.35));
-      background-size:200% 200%;animation:shimmerBorder 4s linear infinite;z-index:-1;
-    }
-    @keyframes shimmerBorder{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        .time-box span {
+            display: block;
+            font-size: 2em;
+            font-weight: bold;
+        }
 
-    h1,h2{
-      font-family:'Playfair Display',serif; color:#1e3a5f; line-height:1.3;
-    }
-    h1{font-size:clamp(1.8rem,6vw,3.5rem);}
-    h2{font-size:clamp(1.5rem,5vw,2.6rem);}
+        .time-label {
+            font-size: 0.9em;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
 
-    .sub{
-      margin-top:16px; font-size:clamp(0.95rem,3.5vw,1.2rem);
-      color:#1e3a5f; font-weight:500; line-height:1.7;
-      animation:textFadeIn 1s ease forwards; opacity:0; transform:translateY(8px);
-    }
-    @keyframes textFadeIn{to{opacity:1;transform:translateY(0)}}
+        .subscription {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            margin: 0 auto;
+        }
 
-    .emoji-big{
-      font-size:clamp(3rem,10vw,4rem); display:block; margin-bottom:16px;
-      animation:pulse 2s ease-in-out infinite;
-      backface-visibility: hidden;
-    }
-    @keyframes pulse{
-      0%,100%{transform:scale(1)} 50%{transform:scale(1.12)}
-    }
+        .subscription-title {
+            font-size: 1.3em;
+            color: #c44569;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
 
-    .dots{display:flex;justify-content:center;gap:8px;margin-top:28px;}
-    .dot{
-      width:9px;height:9px;border-radius:50%;
-      background:rgba(59,130,246,0.2);
-      transition:background 0.4s,transform 0.4s,box-shadow 0.4s;
-    }
-    .dot.on{
-      background:linear-gradient(135deg,#3b82f6,#ec4899);
-      transform:scale(1.4);box-shadow:0 0 8px #818cf8;
-    }
+        .subscription-text {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
 
-    .btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:28px;}
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
 
-    .btn{
-      font-family:'Montserrat',sans-serif;
-      font-size:clamp(0.95rem,3.5vw,1.05rem);
-      font-weight:600; letter-spacing:0.04em;
-      padding:14px clamp(24px,6vw,36px);
-      border:none; border-radius:50px;
-      cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
-      touch-action:manipulation;
-      transition:transform 0.2s ease, box-shadow 0.2s ease;
-      position:relative; overflow:hidden;
-      min-height:50px;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-    }
-    .btn-primary{
-      background:linear-gradient(135deg,#3b82f6,#ec4899,#f43f5e);
-      background-size:200% 200%;
-      animation:btnGradient 3s ease infinite;
-      color:#fff;
-      box-shadow:0 4px 20px rgba(244,63,94,0.45);
-    }
-    @keyframes btnGradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-    .btn-primary:active{transform:scale(0.93);}
-    .btn-ghost{
-      background:rgba(255,255,255,0.65);color:#1e40af;
-      border:2px solid rgba(59,130,246,0.35);
-    }
-    .btn-ghost:active{transform:scale(0.95);}
+        input[type="email"] {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #ff6b9d;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
 
-    #yes-screen{
-      position:fixed;inset:0;z-index:50;
-      display:flex;align-items:center;justify-content:center;
-      background:radial-gradient(circle at 30% 40%,#3b82f6,#818cf8,#ec4899,#f43f5e);
-      opacity:0;pointer-events:none;transition:opacity 0.9s ease;
-    }
-    #yes-screen.show{opacity:1;pointer-events:all;}
-    #yes-screen .msg{
-      font-family:'Playfair Display',serif;color:#fff;text-align:center;
-      padding:30px;
-      transform:scale(0.7);
-      transition:transform 0.8s cubic-bezier(.22,1,.36,1) 0.3s;
-      backface-visibility: hidden;
-    }
-    #yes-screen.show .msg{transform:scale(1);}
-    #yes-screen .msg h1{font-size:clamp(2.5rem,8vw,5rem);color:#fff;}
-    #yes-screen .msg p{font-family:'Montserrat',sans-serif;font-size:clamp(1rem,4vw,1.4rem);margin-top:16px;font-weight:500;}
+        input[type="email"]:focus {
+            outline: none;
+            border-color: #c44569;
+            box-shadow: 0 0 10px rgba(255, 107, 157, 0.3);
+        }
 
-    .divider{
-      width:70px;height:3px;
-      background:linear-gradient(90deg,transparent,#3b82f6,#ec4899,transparent);
-      margin:20px auto 0;border-radius:5px;
-    }
-  </style>
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Floating Hearts */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 2em;
+            opacity: 0.7;
+            animation: float-up 6s infinite;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .success-message {
+            display: none;
+            color: #27ae60;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .subtitle {
+                font-size: 1.2em;
+            }
+
+            .countdown-boxes {
+                gap: 10px;
+            }
+
+            .time-box {
+                min-width: 70px;
+                padding: 15px;
+            }
+
+            .time-box span {
+                font-size: 1.5em;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="hearts-container" id="heartsContainer"></div>
 
-<div id="aurora">
-  <div class="aurora-beam ab1"></div>
-  <div class="aurora-beam ab2"></div>
-  <div class="aurora-beam ab3"></div>
-</div>
+    <div class="container">
+        <h1>❤️ Something Special is Coming ❤️</h1>
+        <p class="subtitle">Get ready for love...</p>
 
-<div id="particles"></div>
+        <div class="countdown">
+            <div class="countdown-title">Countdown to Launch</div>
+            <div class="countdown-boxes">
+                <div class="time-box">
+                    <span id="days">0</span>
+                    <div class="time-label">Days</div>
+                </div>
+                <div class="time-box">
+                    <span id="hours">0</span>
+                    <div class="time-label">Hours</div>
+                </div>
+                <div class="time-box">
+                    <span id="minutes">0</span>
+                    <div class="time-label">Minutes</div>
+                </div>
+                <div class="time-box">
+                    <span id="seconds">0</span>
+                    <div class="time-label">Seconds</div>
+                </div>
+            </div>
+        </div>
 
-<div id="intro">
-  <div class="intro-heart">💝</div>
-  <div class="intro-text">Aydan üçün</div>
-  <div class="intro-sub">Xüsusi bir şey hazırladım</div>
-  <div class="intro-bar"><div class="intro-bar-fill"></div></div>
-</div>
-
-<div id="content">
-
-  <div class="card active" id="step1">
-    <span class="emoji-big">💌</span>
-    <h1>Aydan üçün</h1>
-    <div class="divider"></div>
-    <p class="sub" style="animation-delay:0.3s;">Sənin üçün xüsusi bir şey hazırladım...</p>
-    <div class="btns"><button class="btn btn-primary" onclick="next(2)">Başla &nbsp;✨</button></div>
-    <div class="dots">
-      <div class="dot on"></div><div class="dot"></div><div class="dot"></div>
-      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <div class="subscription">
+            <div class="subscription-title">Stay in the Loop</div>
+            <p class="subscription-text">Be the first to know when we launch</p>
+            <div class="input-group">
+                <input type="email" id="emailInput" placeholder="Enter your email">
+                <button onclick="subscribe()">Subscribe</button>
+            </div>
+            <div class="success-message" id="successMessage">✓ Thank you for subscribing!</div>
+        </div>
     </div>
-  </div>
 
-  <div class="card" id="step2">
-    <span class="emoji-big">💭</span>
-    <h2>Bunu necə deyim...</h2>
-    <div class="divider"></div>
-    <p class="sub" style="animation-delay:0.3s;">Bunu necə yazım, necə deyim deyə çox düşündüm, gizlətməyəcəm, hətta qorxdum belə. Bunu deməklə sənin ürəyini qırmaq istəmirəm, ona görə bunu bir az fərqli formada deməyə qərar aldım.</p>
-    <div class="btns"><button class="btn btn-primary" onclick="next(3)">Davam et →</button></div>
-    <div class="dots">
-      <div class="dot"></div><div class="dot on"></div><div class="dot"></div>
-      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-    </div>
-  </div>
+    <script>
+        // Countdown Timer
+        function updateCountdown() {
+            const launchDate = new Date("2026-12-31T00:00:00").getTime();
+            const now = new Date().getTime();
+            const distance = launchDate - now;
 
-  <div class="card" id="step3">
-    <span class="emoji-big">🌸</span>
-    <h2>Sakitlik...</h2>
-    <div class="divider"></div>
-    <p class="sub" style="animation-delay:0.3s;">Səninlə danışmaq ruhuma sakitlik gətirir, istəmədən özümü xoşbəxt hiss edirəm və səninlə bir az daha çox vaxt keçirmək, səni xoşbəxt etmək istəyirəm.</p>
-    <div class="btns"><button class="btn btn-primary" onclick="next(4)">Sonra? →</button></div>
-    <div class="dots">
-      <div class="dot"></div><div class="dot"></div><div class="dot on"></div>
-      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-    </div>
-  </div>
+            if (distance > 0) {
+                document.getElementById("days").textContent = Math.floor(distance / (1000 * 60 * 60 * 24));
+                document.getElementById("hours").textContent = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById("minutes").textContent = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById("seconds").textContent = Math.floor((distance % (1000 * 60)) / 1000);
+            } else {
+                document.querySelector('.countdown').innerHTML = '<div class="countdown-title">We are Live! ❤️</div>';
+            }
+        }
 
-  <div class="card" id="step4">
-    <span class="emoji-big">✨</span>
-    <h2>Gələcək...</h2>
-    <div class="divider"></div>
-    <p class="sub" style="animation-delay:0.3s;">Mənə keçmiş heç vaxt maraqlı olmayacaq, amma gələcəyi maraqlı edə bilərəm, nəyin bahasına olursa olsun...</p>
-    <div class="btns"><button class="btn btn-primary" onclick="next(5)">Son bir şey... 🤍</button></div>
-    <div class="dots">
-      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-      <div class="dot on"></div><div class="dot"></div><div class="dot"></div>
-    </div>
-  </div>
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
 
-  <div class="card" id="step5">
-    <span class="emoji-big">🥺</span>
-    <h2>Sualım var...</h2>
-    <div class="divider"></div>
-    <p class="sub" style="animation-delay:0.3s;">Ona görə də, sənə kiçik bir sualım var.<br>Ümid edirəm cavabın "bəli" olar...</p>
-    <div class="btns"><button class="btn btn-primary" onclick="next(6)">Soruş →</button></div>
-    <div class="dots">
-      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-      <div class="dot"></div><div class="dot on"></div><div class="dot"></div>
-    </div>
-  </div>
+        // Email Subscription
+        function subscribe() {
+            const email = document.getElementById("emailInput").value;
+            if (email) {
+                document.getElementById("successMessage").style.display = "block";
+                document.getElementById("emailInput").value = "";
+                setTimeout(() => {
+                    document.getElementById("successMessage").style.display = "none";
+                }, 3000);
+            }
+        }
 
-  <div class="card" id="step6">
-    <span class="emoji-big">☕</span>
-    <h2>Coffee date?</h2>
-    <div class="divider"></div>
-    <p class="sub" style="animation-delay:0.3s;">Ona görə səni bir kofe içməyə dəvət edirəm. Sadəcə oturaq, danışaq, bir-birimizi daha yaxşı tanıyaq. Təklifimi qəbul edərsən?</p>
-    <div class="btns">
-      <button class="btn btn-primary" onclick="onYes()">Bəli ❤️</button>
-      <button class="btn btn-ghost" onclick="onNo()">Yox 😅</button>
-    </div>
-    <div class="dots">
-      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-      <div class="dot"></div><div class="dot"></div><div class="dot on"></div>
-    </div>
-  </div>
+        // Allow Enter key to subscribe
+        document.getElementById("emailInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                subscribe();
+            }
+        });
 
-</div>
+        // Floating Hearts Animation
+        const heartsContainer = document.getElementById("heartsContainer");
+        const hearts = ["❤️", "💕", "💖", "💗", "💓", "💞"];
 
-<div id="yes-screen">
-  <div class="msg">
-    <h1>Görüşürük! 😍</h1>
-    <p>WhatsApp-a yönləndirilir...</p>
-  </div>
-</div>
+        function createFloatingHeart() {
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * 100 + "%";
+            heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
+            heart.style.animationDelay = Math.random() * 0.5 + "s";
+            
+            heartsContainer.appendChild(heart);
 
-<script>
-  const phoneNumber = "994997789000";
-  let current = 1;
+            setTimeout(() => {
+                heart.remove();
+            }, 8000);
+        }
 
-  /* detect touch device */
-  const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+        // Create hearts at intervals
+        setInterval(createFloatingHeart, 500);
 
-  /* INTRO */
-  setTimeout(() => {
-    const intro = document.getElementById('intro');
-    intro.classList.add('fade-out');
-    setTimeout(() => intro.remove(), 900);
-  }, 2500);
-
-  /* CARD TRANSITIONS */
-  function next(n) {
-    const prev = document.getElementById('step' + current);
-    prev.classList.add('exit');
-    setTimeout(() => prev.classList.remove('active','exit'), 550);
-    setTimeout(() => {
-      document.getElementById('step'+n).classList.add('active');
-      current = n;
-    }, 220);
-  }
-
-  function onYes() {
-    document.getElementById('yes-screen').classList.add('show');
-    const colors = ['#3b82f6','#818cf8','#ec4899','#f43f5e','#fbbf24','#fff','#c084fc'];
-    const burst = (origin, angle) =>
-      confetti({ particleCount: 80, spread: 80, angle, origin, colors, startVelocity: 45 });
-    burst({x:.5,y:.6}, 90);
-    setTimeout(() => { burst({x:.2,y:.7},60); burst({x:.8,y:.7},120); }, 300);
-    setTimeout(() => burst({x:.5,y:.5},90), 700);
-    setTimeout(() => {
-      window.location.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent("Bəli, təklifini məmnuniyyətlə qəbul edirəm! ☕❤️😍")}`;
-    }, 2200);
-  }
-
-  function onNo() {
-    window.location.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent("Yox, təəssüf ki, qəbul edə bilməyəcəm. 😅")}`;
-  }
-
-  /* FLOATING PARTICLES — FASTER ANIMATION */
-  const emojis = ['❤️','💙','🌸','✨','💕','🌷','💗','☕','🌙','⭐','🥰','🎀','🤍','💙','💙','🧸','🦋','💖'];
-  const pContainer = document.getElementById('particles');
-  for (let i = 0; i < 25; i++) {
-    const el = document.createElement('div');
-    el.className = 'particle';
-    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    el.style.cssText = `left:${Math.random()*100}%;font-size:${14+Math.random()*16}px;animation-duration:${5+Math.random()*6}s;animation-delay:${Math.random()*8}s;`;
-    pContainer.appendChild(el);
-  }
-
-  /* TAP/CLICK BURST */
-  const burstEmojis = ['❤️','💙','💕','🌸','✨','💗','🌟'];
-
-  function spawnBurst(cx, cy) {
-    for (let i = 0; i < 6; i++) {
-      const h = document.createElement('div');
-      h.className = 'click-heart';
-      h.textContent = burstEmojis[Math.floor(Math.random() * burstEmojis.length)];
-      const angle = (Math.PI * 2 / 6) * i;
-      const dist = 35 + Math.random() * 40;
-      h.style.left = cx + 'px';
-      h.style.top  = cy + 'px';
-      h.style.fontSize = (13 + Math.random() * 12) + 'px';
-      h.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
-      h.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
-      h.style.animationDelay = (i * 0.03) + 's';
-      document.body.appendChild(h);
-      setTimeout(() => h.remove(), 800);
-    }
-  }
-
-  /* Touch support */
-  if (isTouch) {
-    document.addEventListener('touchstart', e => {
-      const t = e.touches[0];
-      spawnBurst(t.clientX, t.clientY);
-    }, { passive: true });
-  } else {
-    document.addEventListener('click', e => spawnBurst(e.clientX, e.clientY));
-  }
-
-  /* Prevent double-tap zoom on iOS */
-  let lastTap = 0;
-  document.addEventListener('touchend', e => {
-    const now = Date.now();
-    if (now - lastTap < 300) e.preventDefault();
-    lastTap = now;
-  }, { passive: false });
-
-  /* Prevent pull-to-refresh */
-  document.addEventListener('touchmove', e => {
-    if (e.touches.length === 1) e.preventDefault();
-  }, { passive: false });
-</script>
+        // Create initial hearts
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createFloatingHeart, i * 100);
+        }
+    </script>
 </body>
 </html>
